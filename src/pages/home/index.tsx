@@ -19,7 +19,7 @@ export default function HomePage() {
             <main>
                 <div className={styles.homeHeader}>
                     <div>
-                        <button>Sair</button>
+                        <button onClick={() => router.replace('login')} >Sair</button>
                     </div>
 
                     <h3>Listagem de Usuários</h3>
