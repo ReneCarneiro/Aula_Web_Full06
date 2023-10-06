@@ -1,0 +1,8 @@
+.lineItem {
+    height: 40px;
+    display: flex;
+    font-size: 22px;
+    min-width: 400px;
+    align-items: center;
+    justify-content: space-between;
+}

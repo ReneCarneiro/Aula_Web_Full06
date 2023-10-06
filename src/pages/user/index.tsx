@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 
 import MyInput from '../../components/input'
 import styles from './styles.module.css'
+import { userService } from '@/services/user.service'
 
 export default function UserPage() {
 
@@ -15,7 +16,7 @@ export default function UserPage() {
     const [password, setPassword] = React.useState('')
     const [passConfirm, setPassConfirm] = React.useState('')
 
-    function save() {
+    async function save() {
         if (!name || name.trim() === '') {
             alert('Nome é obrigatório')
             return
@@ -33,9 +34,17 @@ export default function UserPage() {
             return
         }
 
-        // Add aqui o salvar do User
-
-        router.back()
+        try {
+            await userService.create({ name, username, password })
+            router.back()
+            
+        } catch (error: any) {
+            if (error.message === 'Unauthorized') {
+                router.replace('login')
+            } else {
+                alert(`${username}: ${error.message}`)
+            }
+        }
     }
 
     return (
