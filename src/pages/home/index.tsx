@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { User } from '@/model/user'
 import { userService } from '@/services/user.service'
 import UserList from '@/components/user-list'
+import { authService } from '@/services/auth.service'
 
 export default function HomePage() {
 
@@ -13,15 +14,35 @@ export default function HomePage() {
 
     const [ users, setUsers ] = React.useState<User[]>([])
 
+    React.useEffect(fetchUsers, [])
+
     function goToUser() {
-        router.push('user')
+        router.push('/user/0')
+    }
+
+    function treat(error: any) {
+        if (authService.isUnauthorized(error)) {
+            router.replace('login')
+        } else {
+            alert(error.message)
+        }
     }
 
     function fetchUsers() {
-        userService.getList().then(list => setUsers(list))
+        userService.getList()
+            .then(list => setUsers(list))
+            .catch(treat)
     }
 
-    React.useEffect(fetchUsers, [])
+    function edit(id: number) {
+        router.push(`/user/${id}`)
+    }
+
+    function remove(id: number) {
+        userService.remove(id)
+            .then(removed => fetchUsers())
+            .catch(treat)
+    }
 
     return (
         <>
@@ -42,7 +63,7 @@ export default function HomePage() {
                 </div>
 
                 <div className={styles.homeMain}>
-                    <UserList users={users} />
+                    <UserList users={users} edit={edit} remove={remove} />
                 </div>
 
             </main>

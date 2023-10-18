@@ -4,6 +4,10 @@ class AuthService {
 
     private readonly url = 'http://localhost:3030/auth/login'
 
+    public isUnauthorized(error: any) {
+        return (error.message === 'Unauthorized')
+    }
+
     public getLoggedUser() {
         return authRepository.getLogged()
     }
