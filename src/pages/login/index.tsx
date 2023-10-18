@@ -3,6 +3,7 @@ import Head from "next/head"
 
 import { useRouter } from 'next/navigation'
 
+import { authService } from '@/services/auth.service'
 import MyInput from '../../components/input'
 import styles from './styles.module.css'
 
@@ -13,8 +14,9 @@ export default function LoginPage() {
     const [login, setLogin] = React.useState('')
     const [password, setPassword] = React.useState('')
 
-    function signIn() {
-        if (login === 'uedsonreis' && password == '123456') {
+    async function signIn() {
+        const isLogged = await authService.login(login, password)
+        if (isLogged) {
             router.replace('home')
         } else {
             alert('Login/senha inválido(a)!')
