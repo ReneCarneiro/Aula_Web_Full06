@@ -25,7 +25,9 @@ export default function UserPage() {
     React.useEffect(() => {
         const user = authService.getLoggedUser()
         if (!user) router.replace('/login')
+    } , [])
 
+    React.useEffect(() => {
         if (params && params.id) {
             if (Number(params.id) > 0) {
                 setTitle('Edição de Usuário')
